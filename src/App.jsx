@@ -1012,7 +1012,7 @@ const handleSubmit = async (e) => {
       {/* FOOTER */}
       <footer style={{ backgroundColor: '#020617', color: '#64748b', padding: '32px 24px', textAlign: 'center', borderTop: '1px solid #0f172a', marginTop: 'auto' }}>
         <p style={{ fontSize: '13px' }}>
-          © {new Date().getFullYear()} <a href="https://www.omipet.in/" style={{ color: '#f59e0b', textDecoration: 'none' }}>OmiPet Care Network India</a>. All rights reserved.
+          © {new Date().getFullYear()} <a href="https://www.omipet.in/" style={{ color: '#f59e0b', textDecoration: 'none' }}>OmiPet</a>. All rights reserved.
         </p>
       </footer>
     </div>
