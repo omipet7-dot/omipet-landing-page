@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 // OmiPet Database with Accurate Pet Images, Descriptions, and Indian Rupee (INR) Pricing
 const OmniPetDB = {
@@ -82,304 +82,159 @@ const OmniPetDB = {
   }
 };
 
-// URL Testing Switcher Presets
-const TESTING_PRESETS = [
-  { label: '🐶 Dog Accessories', search: '?pet=dog&category=accessories' },
-  { label: '🐕 Dog Breeder Info', search: '?pet=dog&service=breeder' },
-  { label: '🎓 Dog Trainer Info', search: '?pet=dog&service=trainer' },
-  { label: '🍗 Dog Food & Medicines', search: '?pet=dog&category=food,medicines' },
-  { label: '🐱 Cat Medicines', search: '?pet=cat&category=medicines' },
-  { label: '🐾 Cat Breeder & Trainer', search: '?pet=cat&service=breeder,trainer' },
-  { label: '🐰 Small Animals (All)', search: '?pet=small_animal' }
-];
-
-// Google Script Deployment Web App URL (Google Sheet ID: 1g3m9J4kuE30kYJqDjwQvL67N4sbvhP0JfahZMD8n2yc)
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtuqPlCG3MPijP8YG5-J3vHcqVj56v3V2I1y3O1k-3WXqrsEIft63YGbQfppoRByo2/exec";
-
-const styles = {
-  appContainer: {
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#f8fafc',
-    color: '#0f172a'
+// Route-Specific Themes, Layouts & Thank You Page Designs for Each URL
+const ROUTE_THEMES = {
+  'dog_accessories': {
+    primary: '#d97706',       // Warm Amber
+    secondary: '#92400e',
+    lightBg: '#fffbeb',
+    pageBg: '#fefce8',
+    heroBg: '#1c1917',
+    heroText: '#ffffff',
+    heroSubText: '#d6d3d1',
+    heroLayout: 'split-right', // Text Left, Image Right
+    gridCols: 'repeat(auto-fill, minmax(290px, 1fr))',
+    cardRadius: '16px',
+    thankYouLayout: 'classic-top-bar',
+    thankYouBg: '#fffbeb',
+    thankYouAccent: '#d97706'
   },
-  topUrlBar: {
-    backgroundColor: '#0f172a',
-    padding: '10px 16px',
-    borderBottom: '1px solid #1e293b'
+  'dog_breeder': {
+    primary: '#1d4ed8',       // Royal Blue
+    secondary: '#1e3a8a',
+    lightBg: '#eff6ff',
+    pageBg: '#f1f5f9',
+    heroBg: '#0f172a',
+    heroText: '#ffffff',
+    heroSubText: '#93c5fd',
+    heroLayout: 'centered-banner', // Centered Editorial + Wide Image
+    gridCols: 'repeat(auto-fill, minmax(380px, 1fr))',
+    cardRadius: '12px',
+    thankYouLayout: 'split-executive',
+    thankYouBg: '#eff6ff',
+    thankYouAccent: '#1d4ed8'
   },
-  topUrlInner: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    overflowX: 'auto'
+  'dog_trainer': {
+    primary: '#dc2626',       // Energetic Crimson
+    secondary: '#991b1b',
+    lightBg: '#fef2f2',
+    pageBg: '#fafafa',
+    heroBg: '#18181b',
+    heroText: '#ffffff',
+    heroSubText: '#fca5a5',
+    heroLayout: 'split-left', // Image Left, Text Right
+    gridCols: 'repeat(auto-fill, minmax(360px, 1fr))',
+    cardRadius: '8px',
+    thankYouLayout: 'dark-ticket',
+    thankYouBg: '#fef2f2',
+    thankYouAccent: '#dc2626'
   },
-  urlButtonList: {
-    display: 'flex',
-    gap: '8px'
+  'dog_food_medicines': {
+    primary: '#0d9488',       // Nutrition & Vet Teal
+    secondary: '#115e59',
+    lightBg: '#f0fdfa',
+    pageBg: '#f8fafc',
+    heroBg: '#ccfbf1',        // Light Airy Hero
+    heroText: '#0f172a',
+    heroSubText: '#334155',
+    heroLayout: 'light-airy',
+    gridCols: 'repeat(auto-fill, minmax(320px, 1fr))',
+    cardRadius: '20px',
+    thankYouLayout: 'mint-pill',
+    thankYouBg: '#f0fdfa',
+    thankYouAccent: '#0d9488'
   },
-  header: {
-    backgroundColor: '#ffffff',
-    borderBottom: '1px solid #e2e8f0',
-    padding: '16px 24px',
-    position: 'sticky',
-    top: 0,
-    zIndex: 100
+  'cat_medicines': {
+    primary: '#7c3aed',       // Clinical Violet
+    secondary: '#5b21b6',
+    lightBg: '#f5f3ff',
+    pageBg: '#faf5ff',
+    heroBg: '#2e1065',
+    heroText: '#ffffff',
+    heroSubText: '#ddd6fe',
+    heroLayout: 'floating-card',
+    gridCols: 'repeat(auto-fill, minmax(310px, 1fr))',
+    cardRadius: '22px',
+    thankYouLayout: 'lavender-gradient',
+    thankYouBg: '#f5f3ff',
+    thankYouAccent: '#7c3aed'
   },
-  headerInner: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+  'cat_breeder_trainer': {
+    primary: '#db2777',       // Luxury Boutique Rose
+    secondary: '#9d174d',
+    lightBg: '#fdf2f8',
+    pageBg: '#fff1f2',
+    heroBg: '#500724',
+    heroText: '#ffffff',
+    heroSubText: '#fbcfe8',
+    heroLayout: 'boutique-asymmetric',
+    gridCols: 'repeat(auto-fill, minmax(350px, 1fr))',
+    cardRadius: '24px',
+    thankYouLayout: 'boutique-certificate',
+    thankYouBg: '#fdf2f8',
+    thankYouAccent: '#db2777'
   },
-  logoIcon: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '10px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#fff',
-    fontSize: '20px',
-    fontWeight: 'bold'
+  'small_animal': {
+    primary: '#059669',       // Nature Forest Emerald
+    secondary: '#065f46',
+    lightBg: '#ecfdf5',
+    pageBg: '#f0fdf4',
+    heroBg: '#064e3b',
+    heroText: '#ffffff',
+    heroSubText: '#a7f3d0',
+    heroLayout: 'nature-framed',
+    gridCols: 'repeat(auto-fill, minmax(300px, 1fr))',
+    cardRadius: '18px',
+    thankYouLayout: 'eco-side-accent',
+    thankYouBg: '#ecfdf5',
+    thankYouAccent: '#059669'
   },
-  brandTitle: {
-    fontSize: '22px',
-    fontWeight: '900',
-    letterSpacing: '-0.5px'
-  },
-  brandSubtitle: {
-    fontSize: '11px',
-    color: '#64748b',
-    fontWeight: '600'
-  },
-  heroSection: {
-    backgroundColor: '#0f172a',
-    color: '#ffffff',
-    padding: '60px 24px'
-  },
-  heroContainer: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '40px',
-    flexWrap: 'wrap'
-  },
-  heroTag: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    padding: '6px 14px',
-    borderRadius: '20px',
-    fontSize: '12px',
-    fontWeight: '800',
-    marginBottom: '16px',
-    letterSpacing: '0.5px'
-  },
-  heroTitle: {
-    fontSize: '38px',
-    fontWeight: '900',
-    color: '#ffffff',
-    lineHeight: '1.2',
-    marginBottom: '16px'
-  },
-  heroSubtitle: {
-    fontSize: '16px',
-    color: '#94a3b8',
-    lineHeight: '1.6',
-    maxWidth: '540px'
-  },
-  heroImageCard: {
-    borderRadius: '24px',
-    overflow: 'hidden',
-    boxShadow: '0 20px 25px -5px rgba(0,0,0,0.5)',
-    border: '4px solid rgba(255,255,255,0.1)'
-  },
-  catalogSection: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '48px 24px',
-    width: '100%'
-  },
-  categoryHeading: {
-    fontSize: '20px',
-    fontWeight: '800',
-    color: '#1e293b',
-    marginBottom: '20px'
-  },
-  gridContainer: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: '24px'
-  },
-  cardTag: {
-    position: 'absolute',
-    top: '12px',
-    right: '12px',
-    backgroundColor: 'rgba(15, 23, 42, 0.85)',
-    color: '#fff',
-    fontSize: '11px',
-    fontWeight: '700',
-    padding: '4px 10px',
-    borderRadius: '12px',
-    backdropFilter: 'blur(4px)'
-  },
-  cardFooter: {
-    padding: '16px',
-    borderTop: '1px solid #f1f5f9',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  serviceCard: {
-    background: '#ffffff',
-    border: '1px solid #e2e8f0',
-    borderRadius: '16px',
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between'
-  },
-  serviceBadge: {
-    fontSize: '11px',
-    fontWeight: '800',
-    padding: '4px 8px',
-    borderRadius: '6px',
-    backgroundColor: '#fef3c7',
-    color: '#b45309',
-    display: 'inline-block'
-  },
-  formSection: {
-    backgroundColor: '#ffffff',
-    borderTop: '1px solid #e2e8f0',
-    padding: '60px 24px'
-  },
-  formContainer: {
-    maxWidth: '680px',
-    margin: '0 auto',
-    background: '#ffffff',
-    border: '1px solid #cbd5e1',
-    borderRadius: '20px',
-    padding: '36px',
-    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.05)'
-  },
-  modalContent: {
-    background: '#ffffff',
-    borderRadius: '20px',
-    width: '100%',
-    maxWidth: '600px',
-    maxHeight: '90vh',
-    overflowY: 'auto',
-    boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
-    position: 'relative'
-  },
-  thankYouContainer: {
-    maxWidth: '680px',
-    margin: '60px auto',
-    padding: '0 24px',
-    width: '100%',
-    animation: 'fadeInUp 0.5s ease-out'
-  },
-  thankYouCard: {
-    background: '#ffffff',
-    borderRadius: '24px',
-    border: '1px solid #e2e8f0',
-    overflow: 'hidden',
-    boxShadow: '0 25px 50px -12px rgba(0,0,0,0.1)',
-    padding: '40px',
-    textAlign: 'center',
-    position: 'relative'
-  },
-  thankYouHeader: {
-    height: '10px',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0
-  },
-  successBadge: {
-    width: '80px',
-    height: '80px',
-    borderRadius: '50%',
-    backgroundColor: '#dcfce7',
-    color: '#16a34a',
-    fontSize: '40px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: '0 auto 24px auto',
-    fontWeight: 'bold',
-    boxShadow: '0 10px 20px -5px rgba(22, 163, 74, 0.3)',
-    animation: 'bounceScale 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-  },
-  summaryBox: {
-    background: '#f8fafc',
-    border: '1px solid #e2e8f0',
-    borderRadius: '16px',
-    padding: '24px',
-    textAlign: 'left',
-    marginBottom: '28px',
-    marginTop: '20px'
-  },
-  summaryTitle: {
-    fontSize: '13px',
-    fontWeight: '800',
-    color: '#64748b',
-    textTransform: 'uppercase',
-    letterSpacing: '0.8px',
-    marginBottom: '16px',
-    paddingBottom: '8px',
-    borderBottom: '1px solid #e2e8f0'
-  },
-  summaryRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: '14px',
-    color: '#334155',
-    marginBottom: '12px'
+  'default': {
+    primary: '#d97706',
+    secondary: '#b45309',
+    lightBg: '#fef3c7',
+    pageBg: '#f8fafc',
+    heroBg: '#0f172a',
+    heroText: '#ffffff',
+    heroSubText: '#94a3b8',
+    heroLayout: 'split-right',
+    gridCols: 'repeat(auto-fill, minmax(280px, 1fr))',
+    cardRadius: '16px',
+    thankYouLayout: 'classic-top-bar',
+    thankYouBg: '#f8fafc',
+    thankYouAccent: '#d97706'
   }
 };
 
+// URL Testing Switcher Presets matching all 7 requested links
+
+
+// Google Script Deployment Web App URL
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtuqPlCG3MPijP8YG5-J3vHcqVj56v3V2I1y3O1k-3WXqrsEIft63YGbQfppoRByo2/exec";
+
 export default function App() {
   const [currentQueryStr, setCurrentQueryStr] = useState(
-    () => window.location.search || '?pet=dog'
+    () => window.location.search || '?pet=dog&category=accessories'
   );
-  
-  // UI States (Removed Email Field)
+
+  // UI States (No Email Field)
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', phone: '', query: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const applyPresetURL = (presetSearch) => {
-    setCurrentQueryStr(presetSearch);
-    setSubmitted(false); // Return to view mode when clicking a preset
-    if (window.history.pushState) {
-      window.history.pushState(null, '', presetSearch);
-    }
-  };
+
 
   useEffect(() => {
     const onPopState = () => {
-      setCurrentQueryStr(window.location.search || '?pet=dog');
+      setCurrentQueryStr(window.location.search || '?pet=dog&category=accessories');
     };
-
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // Lock body scroll when Modal is active
   useEffect(() => {
-    if (selectedProduct) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = selectedProduct ? 'hidden' : 'auto';
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -388,40 +243,61 @@ export default function App() {
   const params = new URLSearchParams(currentQueryStr);
   const petParam = (params.get('pet') || params.get('type') || 'dog').toLowerCase();
   const petType = OmniPetDB[petParam] ? petParam : 'dog';
+
   const filterCategories = (params.get('category') || '')
     .toLowerCase()
     .split(',')
-    .map(category => category.trim())
+    .map(c => c.trim())
     .filter(Boolean);
+
   const filterServices = (params.get('service') || '')
     .toLowerCase()
     .split(',')
-    .map(service => service.trim())
+    .map(s => s.trim())
     .filter(Boolean);
+
   const currentData = OmniPetDB[petType] || OmniPetDB.dog;
+
+  // Determine exact Route Theme Key based on URL parameters
+  const getActiveThemeKey = () => {
+    if (petType === 'dog') {
+      if (filterCategories.includes('accessories') && filterCategories.length === 1) return 'dog_accessories';
+      if (filterServices.includes('breeder') && filterServices.length === 1) return 'dog_breeder';
+      if (filterServices.includes('trainer') && filterServices.length === 1) return 'dog_trainer';
+      if (filterCategories.includes('food') && filterCategories.includes('medicines')) return 'dog_food_medicines';
+    }
+    if (petType === 'cat') {
+      if (filterCategories.includes('medicines') && filterCategories.length === 1) return 'cat_medicines';
+      if (filterServices.includes('breeder') && filterServices.includes('trainer')) return 'cat_breeder_trainer';
+    }
+    if (petType === 'small_animal') {
+      return 'small_animal';
+    }
+    return 'default';
+  };
+
+  const activeTheme = ROUTE_THEMES[getActiveThemeKey()];
 
   // URL Display Logic
   const isFilterEmpty = filterCategories.length === 0 && filterServices.length === 0;
-  
   const showFood = isFilterEmpty || filterCategories.includes('food');
   const showAccessories = isFilterEmpty || filterCategories.includes('accessories');
   const showMedicines = isFilterEmpty || filterCategories.includes('medicines');
   const showBreeder = isFilterEmpty || filterServices.includes('breeder');
   const showTrainer = isFilterEmpty || filterServices.includes('trainer');
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-
-      const params = new URLSearchParams({
+      const submitParams = new URLSearchParams({
         name: formData.name,
         phone: formData.phone,
-        inquiry: formData.query
+        inquiry: `[${petType.toUpperCase()} - ${currentQueryStr}] ${formData.query}`
       });
 
-      await fetch(`${GOOGLE_SCRIPT_URL}?${params.toString()}`, {
+      await fetch(`${GOOGLE_SCRIPT_URL}?${submitParams.toString()}`, {
         method: 'GET',
         mode: 'no-cors'
       });
@@ -433,14 +309,426 @@ const handleSubmit = async (e) => {
     setSubmitted(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Dynamic Hero Section Renderer based on route's heroLayout
+  const renderHeroSection = () => {
+    const layout = activeTheme.heroLayout;
+
+    // 1. Centered Editorial Banner (?pet=dog&service=breeder)
+    if (layout === 'centered-banner') {
+      return (
+        <section style={{ backgroundColor: activeTheme.heroBg, color: activeTheme.heroText, padding: '56px 24px', textAlign: 'center' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+            <div style={{ display: 'inline-block', padding: '6px 16px', borderRadius: '999px', backgroundColor: activeTheme.primary, color: '#fff', fontSize: '12px', fontWeight: '800', letterSpacing: '1px', marginBottom: '16px' }}>
+              {currentData.badge} • VERIFIED NETWORK
+            </div>
+            <h1 style={{ fontSize: '40px', fontWeight: '900', lineHeight: '1.15', marginBottom: '16px' }}>{currentData.title}</h1>
+            <p style={{ fontSize: '16px', color: activeTheme.heroSubText, maxWidth: '680px', margin: '0 auto 28px auto' }}>{currentData.subtitle}</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap', marginBottom: '36px' }}>
+              <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff' }}>Connect With Breeders</a>
+              <a href="#catalog" className="btn-action" style={{ backgroundColor: 'rgba(255,255,255,0.12)', color: '#fff', border: '1px solid rgba(255,255,255,0.25)' }}>View Kennels</a>
+            </div>
+            <div style={{ borderRadius: '20px', overflow: 'hidden', maxHeight: '340px', border: `3px solid ${activeTheme.primary}`, boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)' }}>
+              <img src={currentData.heroImage} alt={currentData.title} style={{ width: '100%', height: '340px', objectFit: 'cover', display: 'block' }} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // 2. Reversed Split Hero (?pet=dog&service=trainer)
+    if (layout === 'split-left') {
+      return (
+        <section style={{ backgroundColor: activeTheme.heroBg, color: activeTheme.heroText, padding: '60px 24px', borderBottom: `4px solid ${activeTheme.primary}` }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap-reverse' }}>
+            <div style={{ flex: '1', minWidth: '300px', maxWidth: '520px' }}>
+              <div style={{ borderRadius: '12px', overflow: 'hidden', borderLeft: `8px solid ${activeTheme.primary}`, boxShadow: '0 20px 30px rgba(0,0,0,0.5)' }}>
+                <img src={currentData.heroImage} alt={currentData.title} style={{ width: '100%', height: '330px', objectFit: 'cover', display: 'block' }} />
+              </div>
+            </div>
+            <div style={{ flex: '1', minWidth: '300px' }}>
+              <span style={{ backgroundColor: activeTheme.primary, color: '#fff', padding: '5px 12px', borderRadius: '4px', fontSize: '11px', fontWeight: '900', letterSpacing: '1px' }}>
+                PRO K9 TRAINING
+              </span>
+              <h1 style={{ fontSize: '38px', fontWeight: '900', lineHeight: '1.2', margin: '16px 0' }}>{currentData.title}</h1>
+              <p style={{ fontSize: '16px', color: activeTheme.heroSubText, marginBottom: '24px' }}>{currentData.subtitle}</p>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff' }}>Book Trainer Now</a>
+                <a href="#catalog" className="btn-action" style={{ backgroundColor: '#27272a', color: '#fff', border: '1px solid #3f3f46' }}>See Programs</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // 3. Light Airy Wellness Hero (?pet=dog&category=food,medicines)
+    if (layout === 'light-airy') {
+      return (
+        <section style={{ backgroundColor: activeTheme.heroBg, color: activeTheme.heroText, padding: '56px 24px', borderBottom: `2px solid ${activeTheme.primary}` }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1', minWidth: '300px' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', backgroundColor: '#ffffff', color: activeTheme.secondary, padding: '6px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: '800', marginBottom: '16px', boxShadow: '0 2px 6px rgba(0,0,0,0.06)' }}>
+                🩺 VET NUTRITION & PHARMACY
+              </div>
+              <h1 style={{ fontSize: '38px', fontWeight: '900', color: '#0f172a', lineHeight: '1.2', marginBottom: '16px' }}>{currentData.title}</h1>
+              <p style={{ fontSize: '16px', color: activeTheme.heroSubText, lineHeight: '1.6', marginBottom: '24px' }}>{currentData.subtitle}</p>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff' }}>Order Diet & Meds</a>
+                <a href="#catalog" className="btn-action" style={{ backgroundColor: '#ffffff', color: activeTheme.secondary, border: `1px solid ${activeTheme.primary}` }}>Browse Catalog</a>
+              </div>
+            </div>
+            <div style={{ flex: '1', minWidth: '300px', maxWidth: '500px' }}>
+              <div style={{ borderRadius: '28px', overflow: 'hidden', border: '6px solid #ffffff', boxShadow: '0 20px 35px -10px rgba(13, 148, 136, 0.25)' }}>
+                <img src={currentData.heroImage} alt={currentData.title} style={{ width: '100%', height: '310px', objectFit: 'cover', display: 'block' }} />
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // 4. Floating Card Hero (?pet=cat&category=medicines)
+    if (layout === 'floating-card') {
+      return (
+        <section style={{ background: `linear-gradient(135deg, ${activeTheme.heroBg} 0%, ${activeTheme.secondary} 100%)`, color: '#ffffff', padding: '56px 24px' }}>
+          <div style={{ maxWidth: '1140px', margin: '0 auto', backgroundColor: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(10px)', borderRadius: '28px', padding: '36px', border: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', gap: '36px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1.2', minWidth: '290px' }}>
+              <span style={{ backgroundColor: '#ede9fe', color: activeTheme.secondary, padding: '5px 14px', borderRadius: '20px', fontSize: '11px', fontWeight: '900' }}>
+                💊 FELINE WELLNESS CARE
+              </span>
+              <h1 style={{ fontSize: '36px', fontWeight: '900', lineHeight: '1.2', margin: '16px 0' }}>{currentData.title}</h1>
+              <p style={{ fontSize: '15px', color: activeTheme.heroSubText, marginBottom: '24px' }}>{currentData.subtitle}</p>
+              <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: '#ffffff', color: activeTheme.secondary }}>Consult Feline Vet</a>
+            </div>
+            <div style={{ flex: '0.8', minWidth: '280px' }}>
+              <img src={currentData.heroImage} alt={currentData.title} style={{ width: '100%', height: '280px', objectFit: 'cover', borderRadius: '20px', border: '3px solid rgba(255,255,255,0.3)' }} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // 5. Luxury Boutique Hero (?pet=cat&service=breeder,trainer)
+    if (layout === 'boutique-asymmetric') {
+      return (
+        <section style={{ backgroundColor: activeTheme.heroBg, color: '#ffffff', padding: '60px 24px' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '44px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1.1', minWidth: '300px' }}>
+              <div style={{ display: 'inline-block', border: `1px solid ${activeTheme.heroSubText}`, color: activeTheme.heroSubText, padding: '5px 14px', borderRadius: '999px', fontSize: '11px', fontWeight: '700', letterSpacing: '1.2px', marginBottom: '16px' }}>
+                ✦ EXCLUSIVE CATTERY & BEHAVIOR STUDIO
+              </div>
+              <h1 style={{ fontSize: '38px', fontWeight: '900', lineHeight: '1.2', marginBottom: '16px' }}>{currentData.title}</h1>
+              <p style={{ fontSize: '16px', color: activeTheme.heroSubText, marginBottom: '28px' }}>{currentData.subtitle}</p>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', borderRadius: '999px' }}>Request Private Consultation</a>
+                <a href="#catalog" className="btn-action" style={{ backgroundColor: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.35)', borderRadius: '999px' }}>Explore Specialists</a>
+              </div>
+            </div>
+            <div style={{ flex: '0.9', minWidth: '300px' }}>
+              <div style={{ padding: '10px', background: 'rgba(255,255,255,0.1)', borderRadius: '32px' }}>
+                <img src={currentData.heroImage} alt={currentData.title} style={{ width: '100%', height: '320px', objectFit: 'cover', borderRadius: '24px', display: 'block' }} />
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // 6. Nature Framed Hero (?pet=small_animal)
+    if (layout === 'nature-framed') {
+      return (
+        <section style={{ backgroundColor: activeTheme.heroBg, color: '#ffffff', padding: '56px 24px' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '40px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1', minWidth: '300px' }}>
+              <span style={{ backgroundColor: '#10b981', color: '#022c22', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '900' }}>
+                🌿 {currentData.badge}
+              </span>
+              <h1 style={{ fontSize: '36px', fontWeight: '900', lineHeight: '1.2', margin: '16px 0' }}>{currentData.title}</h1>
+              <p style={{ fontSize: '16px', color: activeTheme.heroSubText, marginBottom: '24px' }}>{currentData.subtitle}</p>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: '#10b981', color: '#022c22' }}>Get Small Pet Guidance</a>
+                <a href="#catalog" className="btn-action" style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff' }}>Explore All Care</a>
+              </div>
+            </div>
+            <div style={{ flex: '1', minWidth: '300px', maxWidth: '500px' }}>
+              <img src={currentData.heroImage} alt={currentData.title} style={{ width: '100%', height: '310px', objectFit: 'cover', borderRadius: '24px', border: '4px solid #34d399' }} />
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // 7. Default / Classic Split Right (?pet=dog&category=accessories)
+    return (
+      <section style={{ backgroundColor: activeTheme.heroBg, color: activeTheme.heroText, padding: '60px 24px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '40px', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1', minWidth: '300px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '800', marginBottom: '16px', backgroundColor: 'rgba(255,255,255,0.12)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <span style={{ color: activeTheme.primary, marginRight: '6px', fontSize: '14px' }}>●</span> {currentData.badge}
+            </div>
+            <h1 style={{ fontSize: '38px', fontWeight: '900', lineHeight: '1.2', marginBottom: '16px' }}>{currentData.title}</h1>
+            <p style={{ fontSize: '16px', color: activeTheme.heroSubText, lineHeight: '1.6', maxWidth: '540px' }}>{currentData.subtitle}</p>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '24px' }}>
+              <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff' }}>Get Instant Consultation</a>
+              <a href="#catalog" className="btn-action" style={{ backgroundColor: 'rgba(255,255,255,0.12)', color: '#fff' }}>Explore Products</a>
+            </div>
+          </div>
+          <div style={{ flex: '1', minWidth: '300px', maxWidth: '520px' }}>
+            <div style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.5)', border: `3px solid ${activeTheme.primary}` }}>
+              <img src={currentData.heroImage} alt={currentData.title} style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }} />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  };
+
+  // Dynamic Route-Specific Thank You Page Renderer
+  const renderThankYouPage = () => {
+    const tyLayout = activeTheme.thankYouLayout;
+    const resetForm = () => {
+      setSubmitted(false);
+      setFormData({ name: '', phone: '', query: '' });
+    };
+
+    // Layout A: Split 2-Column Executive Receipt (?pet=dog&service=breeder)
+    if (tyLayout === 'split-executive') {
+      return (
+        <div style={{ maxWidth: '920px', margin: '56px auto', padding: '0 24px', width: '100%', animation: 'fadeInUp 0.5s ease-out' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', backgroundColor: '#ffffff', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(29, 78, 216, 0.18)', border: `1px solid ${activeTheme.primary}` }}>
+            <div style={{ backgroundColor: activeTheme.primary, color: '#ffffff', padding: '44px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '16px', backgroundColor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', marginBottom: '20px' }}>✓</div>
+              <span style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1.2px', textTransform: 'uppercase', opacity: 0.85 }}>BREEDER INQUIRY LOGGED</span>
+              <h1 style={{ fontSize: '30px', fontWeight: '900', margin: '10px 0 14px 0', lineHeight: '1.2' }}>Thank You, {formData.name}!</h1>
+              <p style={{ fontSize: '14px', lineHeight: '1.6', opacity: 0.92 }}>
+                Our KCI-verified breeder coordination desk has received your request. A specialist will call you shortly with pedigree and availability details.
+              </p>
+            </div>
+            <div style={{ padding: '40px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <h3 style={{ fontSize: '13px', fontWeight: '800', color: activeTheme.primary, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '18px' }}>Official Request Dossier</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #e2e8f0', fontSize: '14px' }}>
+                  <span style={{ color: '#64748b' }}>Applicant:</span>
+                  <strong style={{ color: '#0f172a' }}>{formData.name}</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #e2e8f0', fontSize: '14px' }}>
+                  <span style={{ color: '#64748b' }}>Contact Number:</span>
+                  <strong style={{ color: '#0f172a' }}>{formData.phone}</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid #e2e8f0', fontSize: '14px' }}>
+                  <span style={{ color: '#64748b' }}>Service Type:</span>
+                  <strong style={{ color: activeTheme.primary }}>Verified Dog Breeder</strong>
+                </div>
+                <div style={{ marginTop: '14px' }}>
+                  <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b' }}>Message Notes:</span>
+                  <p style={{ marginTop: '6px', backgroundColor: activeTheme.lightBg, padding: '12px', borderRadius: '8px', fontSize: '13px', color: '#1e293b' }}>"{formData.query}"</p>
+                </div>
+              </div>
+              <button onClick={resetForm} className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', width: '100%', marginTop: '24px' }}>
+                Back to Breeder Directory
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Layout B: Dark-Header Ticket Style (?pet=dog&service=trainer)
+    if (tyLayout === 'dark-ticket') {
+      return (
+        <div style={{ maxWidth: '640px', margin: '56px auto', padding: '0 24px', width: '100%', animation: 'fadeInUp 0.5s ease-out' }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(220, 38, 38, 0.15)', border: '1px solid #e4e4e7' }}>
+            <div style={{ backgroundColor: '#18181b', color: '#ffffff', padding: '32px', textAlign: 'center', borderBottom: `4px solid ${activeTheme.primary}` }}>
+              <div style={{ display: 'inline-block', backgroundColor: activeTheme.primary, color: '#fff', padding: '6px 14px', borderRadius: '4px', fontSize: '11px', fontWeight: '900', letterSpacing: '1px', marginBottom: '12px' }}>
+                TRAINING SESSION PASS
+              </div>
+              <h1 style={{ fontSize: '30px', fontWeight: '900' }}>Request Confirmed, {formData.name}!</h1>
+              <p style={{ fontSize: '14px', color: '#a1a1aa', marginTop: '8px' }}>Our Head K9 Behaviorist will reach out to schedule your assessment.</p>
+            </div>
+            <div style={{ padding: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', backgroundColor: '#fafafa', padding: '18px', borderRadius: '10px', border: '1px dashed #d4d4d8', marginBottom: '20px' }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: '#71717a', fontWeight: '700' }}>CLIENT PHONE</div>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: '#18181b', marginTop: '2px' }}>{formData.phone}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '11px', color: '#71717a', fontWeight: '700' }}>PROGRAM</div>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: activeTheme.primary, marginTop: '2px' }}>K9 Obedience & Behavior</div>
+                </div>
+              </div>
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '12px', fontWeight: '800', color: '#3f3f46', marginBottom: '6px' }}>Training Requirements:</div>
+                <div style={{ padding: '14px', backgroundColor: activeTheme.lightBg, borderLeft: `4px solid ${activeTheme.primary}`, fontSize: '13px', color: '#18181b' }}>
+                  {formData.query}
+                </div>
+              </div>
+              <button onClick={resetForm} className="btn-action" style={{ backgroundColor: '#18181b', color: '#fff', width: '100%' }}>
+                Submit Another Training Request
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Layout C: Mint Framed Pill Layout (?pet=dog&category=food,medicines)
+    if (tyLayout === 'mint-pill') {
+      return (
+        <div style={{ maxWidth: '660px', margin: '56px auto', padding: '0 24px', width: '100%', animation: 'fadeInUp 0.5s ease-out' }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '28px', padding: '40px', border: `2px solid ${activeTheme.primary}`, boxShadow: '0 20px 35px -10px rgba(13, 148, 136, 0.18)', textAlign: 'center' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, padding: '8px 18px', borderRadius: '999px', fontSize: '13px', fontWeight: '800', marginBottom: '20px' }}>
+              <span>✓</span> Nutrition & Pharmacy Order Logged
+            </div>
+            <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#0f172a', marginBottom: '10px' }}>Thank You, {formData.name}!</h1>
+            <p style={{ fontSize: '15px', color: '#475569', maxWidth: '480px', margin: '0 auto 24px auto' }}>
+              Our veterinary nutrition desk has received your inquiry for <strong>Dog Food & Medicines</strong>. We will call you at <strong>{formData.phone}</strong> shortly.
+            </p>
+            <div style={{ backgroundColor: activeTheme.lightBg, borderRadius: '18px', padding: '22px', textAlign: 'left', marginBottom: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: '800', color: activeTheme.secondary, marginBottom: '8px', textTransform: 'uppercase' }}>Requested Items & Notes</div>
+              <p style={{ fontSize: '14px', color: '#0f172a', lineHeight: '1.6' }}>"{formData.query}"</p>
+            </div>
+            <button onClick={resetForm} className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', borderRadius: '999px', width: '100%' }}>
+              Explore More Food & Medicines
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // Layout D: Lavender Gradient Card (?pet=cat&category=medicines)
+    if (tyLayout === 'lavender-gradient') {
+      return (
+        <div style={{ maxWidth: '650px', margin: '56px auto', padding: '0 24px', width: '100%', animation: 'fadeInUp 0.5s ease-out' }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(124, 58, 237, 0.2)' }}>
+            <div style={{ background: `linear-gradient(135deg, ${activeTheme.primary}, ${activeTheme.secondary})`, color: '#ffffff', padding: '36px 24px', textAlign: 'center' }}>
+              <div style={{ width: '68px', height: '68px', borderRadius: '50%', backgroundColor: '#ffffff', color: activeTheme.primary, fontSize: '34px', fontWeight: '900', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px auto' }}>✓</div>
+              <h1 style={{ fontSize: '30px', fontWeight: '900' }}>We've Got Your Cat Care Request!</h1>
+              <p style={{ fontSize: '14px', opacity: 0.9, marginTop: '6px' }}>Thank you, {formData.name}. Feline pharmacy support is on the way.</p>
+            </div>
+            <div style={{ padding: '32px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid #ede9fe', marginBottom: '12px', fontSize: '14px' }}>
+                <span style={{ color: '#6b7280' }}>Callback Number:</span>
+                <strong style={{ color: '#1f2937' }}>{formData.phone}</strong>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '12px', borderBottom: '1px solid #ede9fe', marginBottom: '16px', fontSize: '14px' }}>
+                <span style={{ color: '#6b7280' }}>Department:</span>
+                <strong style={{ color: activeTheme.primary }}>Feline Veterinary Medicines</strong>
+              </div>
+              <div style={{ backgroundColor: activeTheme.lightBg, padding: '16px', borderRadius: '14px', fontSize: '13px', color: '#3b0764', marginBottom: '24px' }}>
+                <strong>Inquiry:</strong> {formData.query}
+              </div>
+              <button onClick={resetForm} className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', width: '100%' }}>
+                Return to Cat Medicines
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Layout E: Luxury Boutique Certificate (?pet=cat&service=breeder,trainer)
+    if (tyLayout === 'boutique-certificate') {
+      return (
+        <div style={{ maxWidth: '680px', margin: '56px auto', padding: '0 24px', width: '100%', animation: 'fadeInUp 0.5s ease-out' }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '28px', padding: '14px', border: `2px solid ${activeTheme.primary}`, boxShadow: '0 25px 50px -12px rgba(219, 39, 119, 0.18)' }}>
+            <div style={{ border: `1px dashed ${activeTheme.primary}`, borderRadius: '20px', padding: '36px 28px', textAlign: 'center' }}>
+              <div style={{ fontSize: '12px', fontWeight: '800', color: activeTheme.primary, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px' }}>
+                ✦ VIP FELINE CONCIERGE ✦
+              </div>
+              <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#500724', marginBottom: '12px' }}>Merci, {formData.name}!</h1>
+              <p style={{ fontSize: '15px', color: '#64748b', maxWidth: '460px', margin: '0 auto 24px auto' }}>
+                Your private consultation request for <strong>Cat Breeder & Behavior Services</strong> has been prioritized. We will contact you at <strong>{formData.phone}</strong>.
+              </p>
+              <div style={{ backgroundColor: activeTheme.lightBg, padding: '18px', borderRadius: '16px', textAlign: 'left', marginBottom: '24px' }}>
+                <div style={{ fontSize: '11px', fontWeight: '800', color: activeTheme.secondary, textTransform: 'uppercase', marginBottom: '6px' }}>Consultation Brief</div>
+                <div style={{ fontSize: '14px', color: '#500724', fontStyle: 'italic' }}>"{formData.query}"</div>
+              </div>
+              <button onClick={resetForm} className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', borderRadius: '999px', padding: '14px 32px' }}>
+                Submit Another VIP Request
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Layout F: Eco Side-Accent Nature Card (?pet=small_animal)
+    if (tyLayout === 'eco-side-accent') {
+      return (
+        <div style={{ maxWidth: '680px', margin: '56px auto', padding: '0 24px', width: '100%', animation: 'fadeInUp 0.5s ease-out' }}>
+          <div style={{ backgroundColor: '#ffffff', borderRadius: '20px', borderLeft: `10px solid ${activeTheme.primary}`, padding: '36px', boxShadow: '0 20px 35px -10px rgba(5, 150, 105, 0.16)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '14px', backgroundColor: activeTheme.lightBg, color: activeTheme.primary, fontSize: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>🌿</div>
+              <div>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: activeTheme.primary, textTransform: 'uppercase' }}>Pocket Pet Care Desk</span>
+                <h1 style={{ fontSize: '28px', fontWeight: '900', color: '#064e3b' }}>Thank You, {formData.name}!</h1>
+              </div>
+            </div>
+            <p style={{ fontSize: '15px', color: '#374151', lineHeight: '1.6', marginBottom: '20px' }}>
+              We have received your inquiry regarding small animal nutrition, habitats, or ethical breeders. Our pocket pet specialist will call <strong>{formData.phone}</strong> shortly.
+            </p>
+            <div style={{ backgroundColor: activeTheme.lightBg, padding: '16px 20px', borderRadius: '12px', marginBottom: '24px' }}>
+              <div style={{ fontSize: '12px', fontWeight: '800', color: activeTheme.secondary, marginBottom: '4px' }}>Your Inquiry Details:</div>
+              <div style={{ fontSize: '14px', color: '#064e3b' }}>"{formData.query}"</div>
+            </div>
+            <button onClick={resetForm} className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', width: '100%' }}>
+              Back to Small Animal Care
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // Default / Classic Top-Bar Card (?pet=dog&category=accessories)
+    return (
+      <div style={{ maxWidth: '680px', margin: '60px auto', padding: '0 24px', width: '100%', animation: 'fadeInUp 0.5s ease-out' }}>
+        <div style={{ background: '#ffffff', borderRadius: '24px', border: '1px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.1)', padding: '40px', textAlign: 'center', position: 'relative' }}>
+          <div style={{ height: '10px', position: 'absolute', top: 0, left: 0, right: 0, backgroundColor: activeTheme.primary }} />
+          <div style={{ width: '80px', height: '80px', borderRadius: '50%', backgroundColor: activeTheme.lightBg, color: activeTheme.primary, fontSize: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px auto', fontWeight: 'bold', animation: 'bounceScale 0.6s ease' }}>✓</div>
+          <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#0f172a', marginBottom: '10px' }}>
+            Thank You, {formData.name}!
+          </h1>
+          <p style={{ fontSize: '15px', color: '#475569', lineHeight: '1.6', maxWidth: '500px', margin: '0 auto' }}>
+            Your inquiry for <strong>{petType.replace('_', ' ').toUpperCase()}</strong> care & accessories has been successfully received. Our experts will get back to you shortly.
+          </p>
+          <div style={{ background: activeTheme.lightBg, border: `1px solid ${activeTheme.primary}40`, borderRadius: '16px', padding: '24px', textAlign: 'left', margin: '24px 0 28px 0' }}>
+            <div style={{ fontSize: '13px', fontWeight: '800', color: activeTheme.secondary, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '16px', paddingBottom: '8px', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>Inquiry Details Summary</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#334155', marginBottom: '12px' }}>
+              <span>Pet Care Category:</span>
+              <strong style={{ textTransform: 'capitalize', color: '#0f172a' }}>{petType.replace('_', ' ')}</strong>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', color: '#334155', marginBottom: '12px' }}>
+              <span>Phone Contact:</span>
+              <strong style={{ color: '#0f172a' }}>{formData.phone}</strong>
+            </div>
+            <div style={{ marginTop: '14px' }}>
+              <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '6px' }}>Your Query:</span>
+              <div style={{ background: '#ffffff', padding: '12px 16px', borderRadius: '8px', fontSize: '13px', color: '#334155', fontStyle: 'italic', border: '1px solid #cbd5e1' }}>
+                "{formData.query}"
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={resetForm}
+            className="btn-action"
+            style={{ backgroundColor: activeTheme.primary, color: '#fff', width: '100%', fontSize: '16px', padding: '16px' }}
+          >
+            Submit Another Inquiry
+          </button>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div style={styles.appContainer}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: submitted ? activeTheme.thankYouBg : activeTheme.pageBg, color: '#0f172a', transition: 'background-color 0.3s ease' }}>
       
-      {/* CUSTOM CSS INJECTION WITH FIXED INPUT & PLACEHOLDER STYLING */}
+      {/* CUSTOM CSS INJECTION */}
       <style>{`
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         html { scroll-behavior: smooth; }
-        body { background-color: #f8fafc; color: #0f172a; line-height: 1.5; }
+        body { color: #0f172a; line-height: 1.5; }
         
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(20px); }
@@ -466,12 +754,12 @@ const handleSubmit = async (e) => {
           transition: all 0.2s ease;
         }
         .test-url-btn:hover { background: #334155; color: #ffffff; }
-        .test-url-btn.active { background: #f59e0b; color: #020617; border-color: #f59e0b; }
+        .test-url-btn.active { background: ${activeTheme.primary}; color: #ffffff; border-color: ${activeTheme.primary}; }
 
         .card-item {
           background: #ffffff;
           border: 1px solid #e2e8f0;
-          border-radius: 16px;
+          border-radius: ${activeTheme.cardRadius};
           overflow: hidden;
           transition: transform 0.2s, box-shadow 0.2s;
           display: flex;
@@ -480,40 +768,37 @@ const handleSubmit = async (e) => {
         }
         .card-item:hover {
           transform: translateY(-4px);
-          box-shadow: 0 12px 24px -6px rgba(0,0,0,0.08);
+          box-shadow: 0 14px 28px -6px rgba(0,0,0,0.1);
         }
 
-        /* FIXED GOOGLE FORM INPUT & PLACEHOLDER COLORS */
         .google-input {
           width: 100%;
           padding: 12px 14px;
           border: 1px solid #cbd5e1;
-          border-radius: 8px;
+          border-radius: 10px;
           font-size: 14px;
           background-color: #ffffff !important;
           color: #0f172a !important;
           outline: none;
-          transition: border-color 0.2s;
+          transition: border-color 0.2s, box-shadow 0.2s;
         }
         .google-input::placeholder {
           color: #64748b !important;
           opacity: 1;
         }
         .google-input:focus {
-          border-color: #2563eb;
-          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-          background-color: #ffffff !important;
-          color: #0f172a !important;
+          border-color: ${activeTheme.primary};
+          box-shadow: 0 0 0 3px ${activeTheme.primary}25;
         }
 
         .btn-action {
-          padding: 14px 28px;
+          padding: 13px 26px;
           border-radius: 10px;
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 800;
           border: none;
           cursor: pointer;
-          transition: opacity 0.2s, transform 0.1s;
+          transition: opacity 0.2s, transform 0.15s;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -536,190 +821,97 @@ const handleSubmit = async (e) => {
         }
       `}</style>
 
-      {/* TOP URL TESTING SWITCHER TOOLBAR WITH MAIN WEBSITE LINK */}
-      <div style={styles.topUrlBar}>
-        <div style={styles.topUrlInner}>
-          <a 
-            href="https://www.omipet.in/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ fontSize: '11px', color: '#f59e0b', fontWeight: '800', textDecoration: 'none', background: '#334155', padding: '4px 10px', borderRadius: '4px', whiteSpace: 'nowrap' }}
-          >
-            🌐 www.omipet.in
-          </a>
-          <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', whiteSpace: 'nowrap' }}>
-            | Quick Filter Test:
-          </span>
-
-          <div style={styles.urlButtonList}>
-            {TESTING_PRESETS.map((preset, idx) => {
-              const isActive = currentQueryStr === preset.search;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => applyPresetURL(preset.search)}
-                  className={`test-url-btn ${isActive ? 'active' : ''}`}
-                >
-                  {preset.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      
 
       {/* CLEAN MARKETING HEADER */}
-      <header style={styles.header}>
-        <div style={styles.headerInner}>
+      <header style={{ backgroundColor: '#ffffff', borderBottom: `2px solid ${activeTheme.primary}20`, padding: '16px 24px', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <a href="https://www.omipet.in/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ ...styles.logoIcon, backgroundColor: currentData.themeColor }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '20px', fontWeight: 'bold', backgroundColor: activeTheme.primary }}>
               🐾
             </div>
             <div>
-              <div style={styles.brandTitle}>
-                Omi<span style={{ color: currentData.themeColor }}>Pet</span>
+              <div style={{ fontSize: '22px', fontWeight: '900', letterSpacing: '-0.5px', color: '#0f172a' }}>
+                Omi<span style={{ color: activeTheme.primary }}>Pet</span>
               </div>
-              <div style={styles.brandSubtitle}>
+              <div style={{ fontSize: '11px', color: '#64748b', fontWeight: '600' }}>
                 Care & Wellness Network
               </div>
             </div>
           </a>
 
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <a href="#catalog" style={{ fontSize: '14px', fontWeight: '700', color: '#475569', textDecoration: 'none' }}>
-              Products & Services
-            </a>
-            <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: currentData.themeColor, color: '#fff', fontSize: '13px', padding: '10px 18px' }}>
-              Inquire Now
+            {!submitted && (
+              <a href="#catalog" style={{ fontSize: '14px', fontWeight: '700', color: '#475569', textDecoration: 'none' }}>
+                Catalog
+              </a>
+            )}
+            <a
+              href={submitted ? '#top' : '#inquiry-form'}
+              onClick={(e) => {
+                if (submitted) {
+                  e.preventDefault();
+                  setSubmitted(false);
+                }
+              }}
+              className="btn-action"
+              style={{ backgroundColor: activeTheme.primary, color: '#fff', fontSize: '13px', padding: '10px 18px' }}
+            >
+              {submitted ? '← Back to Page' : 'Inquire Now'}
             </a>
           </div>
         </div>
       </header>
 
-      {/* RENDER CONDITIONAL THANK YOU VIEW OR LANDING CONTENT */}
+      {/* CONDITIONAL RENDER: ROUTE-SPECIFIC THANK YOU PAGE OR LANDING PAGE */}
       {submitted ? (
-        /* ELEGANT ANIMATED THANK YOU VIEW */
-        <div style={styles.thankYouContainer}>
-          <div style={styles.thankYouCard}>
-            <div style={{ ...styles.thankYouHeader, backgroundColor: currentData.themeColor }} />
-            
-            <div style={styles.successBadge}>✓</div>
-            <h1 style={{ fontSize: '32px', fontWeight: '900', color: '#0f172a', marginBottom: '10px' }}>
-              Thank You, {formData.name}!
-            </h1>
-            <p style={{ fontSize: '15px', color: '#475569', lineHeight: '1.6', maxWidth: '500px', margin: '0 auto' }}>
-              Your inquiry for <strong>{petType.replace('_', ' ').toUpperCase()}</strong> care services has been successfully received. Our team of certified pet care experts will get back to you shortly.
-            </p>
-
-            <div style={styles.summaryBox}>
-              <div style={styles.summaryTitle}>Inquiry Details Summary</div>
-              <div style={styles.summaryRow}>
-                <span style={{ color: '#64748b' }}>Pet Care Category:</span>
-                <strong style={{ textTransform: 'capitalize', color: '#0f172a' }}>{petType.replace('_', ' ')}</strong>
-              </div>
-              <div style={styles.summaryRow}>
-                <span style={{ color: '#64748b' }}>Phone Contact:</span>
-                <strong style={{ color: '#0f172a' }}>{formData.phone}</strong>
-              </div>
-              <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
-                <span style={{ fontSize: '12px', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '6px' }}>Your Query:</span>
-                <div style={{ background: '#ffffff', padding: '12px 16px', borderRadius: '8px', fontSize: '13px', color: '#334155', fontStyle: 'italic', border: '1px solid #cbd5e1' }}>
-                  "{formData.query}"
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => {
-                setSubmitted(false);
-                setFormData({ name: '', phone: '', query: '' });
-              }}
-              className="btn-action"
-              style={{ backgroundColor: currentData.themeColor, color: '#fff', width: '100%', fontSize: '16px', padding: '16px' }}
-            >
-              Submit Another Inquiry
-            </button>
-          </div>
-        </div>
+        renderThankYouPage()
       ) : (
-        /* MARKETING LANDING PAGE VIEW */
         <main>
-          {/* HERO BANNER SECTION */}
-          <section style={styles.heroSection}>
-            <div style={styles.heroContainer}>
-              <div style={{ flex: '1', minWidth: '300px' }}>
-                <div style={{ ...styles.heroTag, backgroundColor: 'rgba(255,255,255,0.12)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)' }}>
-                  <span style={{ color: currentData.themeColor, marginRight: '6px', fontSize: '14px' }}>●</span> {currentData.badge}
-                </div>
-                <h1 style={styles.heroTitle}>{currentData.title}</h1>
-                <p style={styles.heroSubtitle}>{currentData.subtitle}</p>
-
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '24px' }}>
-                  <a
-                    href="#inquiry-form"
-                    className="btn-action"
-                    style={{ backgroundColor: currentData.themeColor, color: '#fff' }}
-                  >
-                    Get Instant Consultation
-                  </a>
-                  <a
-                    href="#catalog"
-                    className="btn-action"
-                    style={{ backgroundColor: '#1e293b', color: '#fff' }}
-                  >
-                    Explore Products
-                  </a>
-                </div>
-              </div>
-
-              <div style={{ flex: '1', minWidth: '300px', maxWidth: '520px' }}>
-                <div style={styles.heroImageCard}>
-                  <img
-                    src={currentData.heroImage}
-                    alt={currentData.title}
-                    style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
+          {/* DYNAMIC HERO BANNER SECTION */}
+          {renderHeroSection()}
 
           {/* DYNAMIC CATALOG SECTION */}
-          <section id="catalog" style={styles.catalogSection}>
-            <div style={{ marginBottom: '32px', borderBottom: '2px solid #e2e8f0', paddingBottom: '16px' }}>
+          <section id="catalog" style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 24px', width: '100%' }}>
+            <div style={{ marginBottom: '32px', borderBottom: `2px solid ${activeTheme.primary}30`, paddingBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <h2 style={{ fontSize: '28px', fontWeight: '900', color: '#0f172a' }}>
-                Featured Solutions for <span style={{ textTransform: 'capitalize' }}>{petType.replace('_', ' ')}s</span>
+                Curated Solutions for <span style={{ color: activeTheme.primary, textTransform: 'capitalize' }}>{petType.replace('_', ' ')}s</span>
               </h2>
+              <span style={{ backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, padding: '6px 14px', borderRadius: '999px', fontSize: '12px', fontWeight: '800' }}>
+                Verified India Network
+              </span>
             </div>
 
             {/* 1. FOOD CATEGORY */}
             {showFood && currentData.food && (
               <div style={{ marginBottom: '48px' }}>
-                <h3 style={styles.categoryHeading}>🥣 Premium Food & Diets</h3>
-                <div style={styles.gridContainer}>
+                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1e293b', marginBottom: '20px' }}>🥣 Premium Food & Diets</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: activeTheme.gridCols, gap: '24px' }}>
                   {currentData.food.map((item) => (
                     <div key={item.id} className="card-item">
                       <div>
-                        <div style={{ position: 'relative', height: '180px', background: '#f1f5f9' }}>
+                        <div style={{ position: 'relative', height: '190px', background: '#f1f5f9' }}>
                           <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          <span style={styles.cardTag}>{item.tag}</span>
+                          <span style={{ position: 'absolute', top: '12px', right: '12px', backgroundColor: activeTheme.primary, color: '#fff', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '12px' }}>
+                            {item.tag}
+                          </span>
                         </div>
-                        <div style={{ padding: '16px' }}>
-                          <div style={{ fontSize: '12px', fontWeight: '700', color: '#d97706', marginBottom: '4px' }}>
+                        <div style={{ padding: '18px' }}>
+                          <div style={{ fontSize: '12px', fontWeight: '700', color: activeTheme.primary, marginBottom: '4px' }}>
                             {item.rating}
                           </div>
                           <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', marginBottom: '6px' }}>
                             {item.name}
                           </h4>
-                          <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.4' }}>{item.desc}</p>
+                          <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>{item.desc}</p>
                         </div>
                       </div>
-                      <div style={styles.cardFooter}>
+                      <div style={{ padding: '16px 18px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontSize: '18px', fontWeight: '900', color: '#0f172a' }}>{item.price}</span>
                         <button
                           onClick={() => setSelectedProduct(item)}
                           className="btn-action"
-                          style={{ backgroundColor: currentData.lightBg, color: currentData.themeColor, fontSize: '12px', padding: '8px 14px' }}
+                          style={{ backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, fontSize: '12px', padding: '8px 14px' }}
                         >
                           View Item
                         </button>
@@ -733,31 +925,33 @@ const handleSubmit = async (e) => {
             {/* 2. ACCESSORIES CATEGORY */}
             {showAccessories && currentData.accessories && (
               <div style={{ marginBottom: '48px' }}>
-                <h3 style={styles.categoryHeading}>🎾 Pet Accessories & Gear</h3>
-                <div style={styles.gridContainer}>
+                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1e293b', marginBottom: '20px' }}>🎾 Pet Accessories & Gear</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: activeTheme.gridCols, gap: '24px' }}>
                   {currentData.accessories.map((item) => (
                     <div key={item.id} className="card-item">
                       <div>
-                        <div style={{ position: 'relative', height: '180px', background: '#f1f5f9' }}>
+                        <div style={{ position: 'relative', height: '190px', background: '#f1f5f9' }}>
                           <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          <span style={styles.cardTag}>{item.tag}</span>
+                          <span style={{ position: 'absolute', top: '12px', right: '12px', backgroundColor: activeTheme.primary, color: '#fff', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '12px' }}>
+                            {item.tag}
+                          </span>
                         </div>
-                        <div style={{ padding: '16px' }}>
-                          <div style={{ fontSize: '12px', fontWeight: '700', color: '#d97706', marginBottom: '4px' }}>
+                        <div style={{ padding: '18px' }}>
+                          <div style={{ fontSize: '12px', fontWeight: '700', color: activeTheme.primary, marginBottom: '4px' }}>
                             {item.rating}
                           </div>
                           <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', marginBottom: '6px' }}>
                             {item.name}
                           </h4>
-                          <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.4' }}>{item.desc}</p>
+                          <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>{item.desc}</p>
                         </div>
                       </div>
-                      <div style={styles.cardFooter}>
+                      <div style={{ padding: '16px 18px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontSize: '18px', fontWeight: '900', color: '#0f172a' }}>{item.price}</span>
                         <button
                           onClick={() => setSelectedProduct(item)}
                           className="btn-action"
-                          style={{ backgroundColor: currentData.lightBg, color: currentData.themeColor, fontSize: '12px', padding: '8px 14px' }}
+                          style={{ backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, fontSize: '12px', padding: '8px 14px' }}
                         >
                           View Item
                         </button>
@@ -771,31 +965,33 @@ const handleSubmit = async (e) => {
             {/* 3. MEDICINES CATEGORY */}
             {showMedicines && currentData.medicines && (
               <div style={{ marginBottom: '48px' }}>
-                <h3 style={styles.categoryHeading}>💊 Certified Veterinary Health & Medicines</h3>
-                <div style={styles.gridContainer}>
+                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1e293b', marginBottom: '20px' }}>💊 Certified Veterinary Health & Medicines</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: activeTheme.gridCols, gap: '24px' }}>
                   {currentData.medicines.map((item) => (
                     <div key={item.id} className="card-item">
                       <div>
-                        <div style={{ position: 'relative', height: '180px', background: '#f1f5f9' }}>
+                        <div style={{ position: 'relative', height: '190px', background: '#f1f5f9' }}>
                           <img src={item.img} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          <span style={styles.cardTag}>{item.tag}</span>
+                          <span style={{ position: 'absolute', top: '12px', right: '12px', backgroundColor: activeTheme.primary, color: '#fff', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '12px' }}>
+                            {item.tag}
+                          </span>
                         </div>
-                        <div style={{ padding: '16px' }}>
-                          <div style={{ fontSize: '12px', fontWeight: '700', color: '#d97706', marginBottom: '4px' }}>
+                        <div style={{ padding: '18px' }}>
+                          <div style={{ fontSize: '12px', fontWeight: '700', color: activeTheme.primary, marginBottom: '4px' }}>
                             {item.rating}
                           </div>
                           <h4 style={{ fontSize: '16px', fontWeight: '800', color: '#0f172a', marginBottom: '6px' }}>
                             {item.name}
                           </h4>
-                          <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.4' }}>{item.desc}</p>
+                          <p style={{ fontSize: '13px', color: '#64748b', lineHeight: '1.5' }}>{item.desc}</p>
                         </div>
                       </div>
-                      <div style={styles.cardFooter}>
+                      <div style={{ padding: '16px 18px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <span style={{ fontSize: '18px', fontWeight: '900', color: '#0f172a' }}>{item.price}</span>
                         <button
                           onClick={() => setSelectedProduct(item)}
                           className="btn-action"
-                          style={{ backgroundColor: currentData.lightBg, color: currentData.themeColor, fontSize: '12px', padding: '8px 14px' }}
+                          style={{ backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, fontSize: '12px', padding: '8px 14px' }}
                         >
                           View Item
                         </button>
@@ -809,31 +1005,33 @@ const handleSubmit = async (e) => {
             {/* 4. BREEDER SERVICE */}
             {showBreeder && currentData.breeder && (
               <div style={{ marginBottom: '48px' }}>
-                <h3 style={styles.categoryHeading}>🏡 Verified Breeder Network</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1e293b', marginBottom: '20px' }}>🏡 Verified Breeder Network</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: activeTheme.gridCols, gap: '20px' }}>
                   {currentData.breeder.map((b) => (
-                    <div key={b.id} style={styles.serviceCard}>
+                    <div key={b.id} className="card-item" style={{ padding: '22px', borderTop: `4px solid ${activeTheme.primary}` }}>
                       <div>
                         <div style={{ display: 'flex', gap: '14px', alignItems: 'center', marginBottom: '14px' }}>
                           <img
                             src={b.avatar}
                             alt={b.name}
-                            style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${currentData.themeColor}` }}
+                            style={{ width: '58px', height: '58px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${activeTheme.primary}` }}
                           />
                           <div>
-                            <span style={styles.serviceBadge}>{b.tag}</span>
-                            <h4 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', marginTop: '2px' }}>{b.name}</h4>
+                            <span style={{ fontSize: '11px', fontWeight: '800', padding: '3px 9px', borderRadius: '6px', backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, display: 'inline-block' }}>
+                              {b.tag}
+                            </span>
+                            <h4 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', marginTop: '3px' }}>{b.name}</h4>
                             <div style={{ fontSize: '11px', color: '#64748b' }}>📍 {b.location}</div>
                           </div>
                         </div>
-                        <p style={{ fontSize: '13px', color: '#475569', marginBottom: '12px' }}>{b.desc}</p>
+                        <p style={{ fontSize: '13px', color: '#475569', marginBottom: '14px', lineHeight: '1.5' }}>{b.desc}</p>
                       </div>
                       <div style={{ paddingTop: '12px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                           <div style={{ fontSize: '11px', color: '#94a3b8' }}>Contact: {b.contact}</div>
                           <div style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a' }}>{b.fee}</div>
                         </div>
-                        <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: '#2563eb', color: '#fff', fontSize: '11px', padding: '8px 12px' }}>
+                        <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', fontSize: '11px', padding: '8px 14px' }}>
                           Inquire Breed
                         </a>
                       </div>
@@ -846,31 +1044,33 @@ const handleSubmit = async (e) => {
             {/* 5. TRAINER SERVICE */}
             {showTrainer && currentData.trainer && (
               <div style={{ marginBottom: '48px' }}>
-                <h3 style={styles.categoryHeading}>🎓 Certified Pet Trainers & Behaviorists</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1e293b', marginBottom: '20px' }}>🎓 Certified Pet Trainers & Behaviorists</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: activeTheme.gridCols, gap: '20px' }}>
                   {currentData.trainer.map((t) => (
-                    <div key={t.id} style={styles.serviceCard}>
+                    <div key={t.id} className="card-item" style={{ padding: '22px', borderLeft: `4px solid ${activeTheme.primary}` }}>
                       <div>
                         <div style={{ display: 'flex', gap: '14px', alignItems: 'center', marginBottom: '14px' }}>
                           <img
                             src={t.avatar}
                             alt={t.name}
-                            style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #4f46e5' }}
+                            style={{ width: '58px', height: '58px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${activeTheme.primary}` }}
                           />
                           <div>
-                            <span style={{ ...styles.serviceBadge, backgroundColor: '#e0e7ff', color: '#3730a3' }}>{t.tag}</span>
-                            <h4 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', marginTop: '2px' }}>{t.name}</h4>
+                            <span style={{ fontSize: '11px', fontWeight: '800', padding: '3px 9px', borderRadius: '6px', backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, display: 'inline-block' }}>
+                              {t.tag}
+                            </span>
+                            <h4 style={{ fontSize: '17px', fontWeight: '800', color: '#0f172a', marginTop: '3px' }}>{t.name}</h4>
                             <div style={{ fontSize: '11px', color: '#64748b' }}>📍 {t.location}</div>
                           </div>
                         </div>
-                        <p style={{ fontSize: '13px', color: '#475569', marginBottom: '12px' }}>{t.desc}</p>
+                        <p style={{ fontSize: '13px', color: '#475569', marginBottom: '14px', lineHeight: '1.5' }}>{t.desc}</p>
                       </div>
                       <div style={{ paddingTop: '12px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                           <div style={{ fontSize: '11px', color: '#94a3b8' }}>Contact: {t.contact}</div>
                           <div style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a' }}>{t.fee}</div>
                         </div>
-                        <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: '#4f46e5', color: '#fff', fontSize: '11px', padding: '8px 12px' }}>
+                        <a href="#inquiry-form" className="btn-action" style={{ backgroundColor: activeTheme.primary, color: '#fff', fontSize: '11px', padding: '8px 14px' }}>
                           Book Session
                         </a>
                       </div>
@@ -881,15 +1081,18 @@ const handleSubmit = async (e) => {
             )}
           </section>
 
-          {/* INQUIRY FORM SECTION (UPDATED WITHOUT EMAIL) */}
-          <section id="inquiry-form" style={styles.formSection}>
-            <div style={styles.formContainer}>
+          {/* INQUIRY FORM SECTION (NO EMAIL FIELD) */}
+          <section id="inquiry-form" style={{ backgroundColor: activeTheme.lightBg, borderTop: `1px solid ${activeTheme.primary}30`, padding: '60px 24px' }}>
+            <div style={{ maxWidth: '680px', margin: '0 auto', background: '#ffffff', border: `1px solid ${activeTheme.primary}40`, borderRadius: '22px', padding: '36px', boxShadow: '0 15px 30px -10px rgba(0,0,0,0.08)' }}>
               <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-                <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a' }}>
-                  Inquire for <span style={{ color: currentData.themeColor, textTransform: 'capitalize' }}>{petType.replace('_', ' ')} Care</span>
+                <span style={{ backgroundColor: activeTheme.lightBg, color: activeTheme.secondary, padding: '4px 12px', borderRadius: '999px', fontSize: '11px', fontWeight: '800', textTransform: 'uppercase' }}>
+                  Direct Expert Desk
+                </span>
+                <h2 style={{ fontSize: '26px', fontWeight: '900', color: '#0f172a', marginTop: '8px' }}>
+                  Inquire for <span style={{ color: activeTheme.primary, textTransform: 'capitalize' }}>{petType.replace('_', ' ')} Care</span>
                 </h2>
                 <p style={{ fontSize: '13px', color: '#64748b', marginTop: '4px' }}>
-                  Fill out the form below to connect directly with our experts.
+                  Fill out the form below to connect directly with our specialists.
                 </p>
               </div>
 
@@ -929,7 +1132,7 @@ const handleSubmit = async (e) => {
                   <textarea
                     required
                     rows={4}
-                    placeholder={`Describe your request for ${petType.replace('_', ' ')} food, accessories, medicines, or services...`}
+                    placeholder={`Describe your request for ${petType.replace('_', ' ')} care, products, or consultation...`}
                     value={formData.query}
                     onChange={(e) => setFormData({ ...formData, query: e.target.value })}
                     className="google-input"
@@ -941,7 +1144,7 @@ const handleSubmit = async (e) => {
                   type="submit"
                   disabled={isSubmitting}
                   className="btn-action"
-                  style={{ backgroundColor: currentData.themeColor, color: '#ffffff', marginTop: '8px' }}
+                  style={{ backgroundColor: activeTheme.primary, color: '#ffffff', marginTop: '8px', padding: '15px' }}
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Inquiry'}
                 </button>
@@ -954,7 +1157,7 @@ const handleSubmit = async (e) => {
       {/* ITEM DETAILS MODAL */}
       {selectedProduct && (
         <div className="modal-overlay" onClick={() => setSelectedProduct(null)}>
-          <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          <div style={{ background: '#ffffff', borderRadius: '20px', width: '100%', maxWidth: '580px', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative' }} onClick={(e) => e.stopPropagation()}>
             <div style={{ position: 'relative', height: '260px', background: '#f1f5f9' }}>
               <img src={selectedProduct.img} alt={selectedProduct.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <button
@@ -963,12 +1166,12 @@ const handleSubmit = async (e) => {
                   position: 'absolute',
                   top: '12px',
                   right: '12px',
-                  background: 'rgba(0,0,0,0.6)',
+                  background: 'rgba(0,0,0,0.65)',
                   color: '#fff',
                   border: 'none',
                   borderRadius: '50%',
-                  width: '32px',
-                  height: '32px',
+                  width: '34px',
+                  height: '34px',
                   cursor: 'pointer',
                   fontSize: '16px',
                   display: 'flex',
@@ -982,8 +1185,8 @@ const handleSubmit = async (e) => {
 
             <div style={{ padding: '24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <span style={{ fontSize: '12px', fontWeight: '800', color: '#d97706' }}>{selectedProduct.rating}</span>
-                <span style={{ fontSize: '12px', fontWeight: '800', color: '#059669', background: '#d1fae5', padding: '2px 8px', borderRadius: '4px' }}>In Stock</span>
+                <span style={{ fontSize: '12px', fontWeight: '800', color: activeTheme.primary }}>{selectedProduct.rating}</span>
+                <span style={{ fontSize: '12px', fontWeight: '800', color: activeTheme.secondary, background: activeTheme.lightBg, padding: '3px 10px', borderRadius: '999px' }}>In Stock</span>
               </div>
 
               <h3 style={{ fontSize: '20px', fontWeight: '900', color: '#0f172a', marginBottom: '8px' }}>{selectedProduct.name}</h3>
@@ -999,7 +1202,7 @@ const handleSubmit = async (e) => {
                   href="#inquiry-form"
                   onClick={() => setSelectedProduct(null)}
                   className="btn-action"
-                  style={{ backgroundColor: currentData.themeColor, color: '#fff', fontSize: '13px' }}
+                  style={{ backgroundColor: activeTheme.primary, color: '#fff', fontSize: '13px' }}
                 >
                   Order / Inquire
                 </a>
@@ -1010,9 +1213,9 @@ const handleSubmit = async (e) => {
       )}
 
       {/* FOOTER */}
-      <footer style={{ backgroundColor: '#020617', color: '#64748b', padding: '32px 24px', textAlign: 'center', borderTop: '1px solid #0f172a', marginTop: 'auto' }}>
+      <footer style={{ backgroundColor: '#020617', color: '#94a3b8', padding: '32px 24px', textAlign: 'center', borderTop: '1px solid #0f172a', marginTop: 'auto' }}>
         <p style={{ fontSize: '13px' }}>
-          © {new Date().getFullYear()} <a href="https://www.omipet.in/" style={{ color: '#f59e0b', textDecoration: 'none' }}>OmiPet</a>. All rights reserved.
+          © {new Date().getFullYear()} <a href="https://www.omipet.in/" style={{ color: activeTheme.primary, fontWeight: '700', textDecoration: 'none' }}>OmiPet</a>. All rights reserved.
         </p>
       </footer>
     </div>
